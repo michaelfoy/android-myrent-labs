@@ -3,17 +3,23 @@ package org.wit.myrent.activities;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.text.Editable;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import org.wit.myrent.R;
 import org.wit.myrent.models.Residence;
 
-public class MyRentActivity extends AppCompatActivity implements TextWatcher {
+public class ResidenceActivity extends AppCompatActivity implements TextWatcher, CompoundButton.OnCheckedChangeListener {
 
     private EditText  geolocation;
     private Residence residence;
+    private CheckBox rented;
+    private Button dateButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -23,6 +29,11 @@ public class MyRentActivity extends AppCompatActivity implements TextWatcher {
 
         geolocation = (EditText) findViewById(R.id.geolocation);
         residence = new Residence();
+        dateButton  = (Button)   findViewById(R.id.registrationDate);
+        rented  = (CheckBox) findViewById(R.id.isRented);
+        dateButton .setEnabled(false);
+        rented.setOnCheckedChangeListener(this);
+
         // Register a TextWatcher in the EditText geolocation object
         geolocation.addTextChangedListener(this);
     }
@@ -38,6 +49,13 @@ public class MyRentActivity extends AppCompatActivity implements TextWatcher {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_myrent, menu);
         return true;
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton arg0, boolean isChecked)
+    {
+        Log.i(this.getClass().getSimpleName(), "rented Checked");
+        residence.rented = isChecked;
     }
 
     @Override
