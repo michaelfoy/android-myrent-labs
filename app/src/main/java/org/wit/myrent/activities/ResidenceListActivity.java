@@ -7,6 +7,7 @@ import org.wit.myrent.models.Residence;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +42,7 @@ public class ResidenceListActivity extends Activity  implements AdapterView.OnIt
         adapter = new ResidenceAdapter(this, portfolio.residences);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(this);
+        Log.v("ClickListener", "Created");
 
     }
 
