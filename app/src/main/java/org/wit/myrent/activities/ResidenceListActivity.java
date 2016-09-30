@@ -54,6 +54,13 @@ public class ResidenceListActivity extends Activity  implements AdapterView.OnIt
         intent.putExtra("RESIDENCE_ID", residence.id);
         startActivity(intent);
     }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        adapter.notifyDataSetChanged();
+    }
 }
 
 class ResidenceAdapter extends ArrayAdapter<Residence>
