@@ -7,21 +7,26 @@ import org.wit.myrent.models.Residence;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ListView;
-import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
+import static org.wit.android.helpers.IntentHelper.startActivityWithData;
+import static org.wit.android.helpers.IntentHelper.startActivityWithDataForResult;
+import android.view.MenuItem;
 
 import java.util.ArrayList;
 
-public class ResidenceListActivity extends Activity  implements AdapterView.OnItemClickListener
+public class ResidenceListActivity extends AppCompatActivity implements AdapterView.OnItemClickListener
 {
     private ListView listView;
     private Portfolio portfolio;
@@ -50,9 +55,7 @@ public class ResidenceListActivity extends Activity  implements AdapterView.OnIt
     public void onItemClick(AdapterView<?> parent, View view, int position, long id)
     {
         Residence residence = adapter.getItem(position);
-        Intent intent = new Intent(this, ResidenceActivity.class);
-        intent.putExtra("RESIDENCE_ID", residence.id);
-        startActivity(intent);
+        startActivityWithData(this, ResidenceActivity.class, "RESIDENCE_ID", residence.id);
     }
 
     @Override
@@ -60,6 +63,28 @@ public class ResidenceListActivity extends Activity  implements AdapterView.OnIt
     {
         super.onResume();
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.residencelist, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case R.id.menu_item_new_residence: Residence residence = new Residence();
+                portfolio.addResidence(residence);
+                startActivityWithDataForResult(this, ResidenceActivity.class, "RESIDENCE_ID", residence.id, 0);
+                return true;
+
+            default: return super.onOptionsItemSelected(item);
+        }
     }
 }
 

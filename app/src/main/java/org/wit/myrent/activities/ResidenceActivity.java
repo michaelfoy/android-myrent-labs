@@ -34,7 +34,7 @@ public class ResidenceActivity extends AppCompatActivity implements TextWatcher,
         residence = new Residence();
         dateButton  = (Button)   findViewById(R.id.registrationDate);
         rented  = (CheckBox) findViewById(R.id.isRented);
-        dateButton .setEnabled(false);
+        dateButton.setEnabled(false);
         rented.setOnCheckedChangeListener(this);
 
         // Register a TextWatcher in the EditText geolocation object
