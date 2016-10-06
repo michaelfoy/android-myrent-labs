@@ -47,8 +47,6 @@ public class ResidenceListActivity extends AppCompatActivity implements AdapterV
         adapter = new ResidenceAdapter(this, portfolio.residences);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(this);
-        Log.v("ClickListener", "Created");
-
     }
 
     @Override
