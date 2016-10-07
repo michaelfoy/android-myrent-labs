@@ -6,6 +6,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.text.Editable;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -18,7 +19,7 @@ import java.util.GregorianCalendar;
 
 import android.app.DatePickerDialog;
 import android.view.View;
-import android.view.View.OnClickListener;
+import static org.wit.android.helpers.IntentHelper.navigateUp;
 
 import org.wit.myrent.R;
 import org.wit.myrent.app.MyRentApp;
@@ -37,6 +38,7 @@ public class ResidenceActivity extends AppCompatActivity implements TextWatcher,
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_residence);
+    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     geolocation = (EditText) findViewById(R.id.geolocation);
     residence = new Residence();
@@ -78,6 +80,17 @@ public class ResidenceActivity extends AppCompatActivity implements TextWatcher,
     // Inflate the menu; this adds items to the action bar if it is present.
     getMenuInflater().inflate(R.menu.menu_myrent, menu);
     return true;
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item)
+  {
+    switch (item.getItemId())
+    {
+      case android.R.id.home:  navigateUp(this);
+        return true;
+    }
+    return super.onOptionsItemSelected(item);
   }
 
   @Override
