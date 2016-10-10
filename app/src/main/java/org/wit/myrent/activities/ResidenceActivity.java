@@ -1,5 +1,6 @@
 package org.wit.myrent.activities;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextWatcher;
@@ -21,6 +22,10 @@ import android.app.DatePickerDialog;
 import android.view.View;
 import static org.wit.android.helpers.IntentHelper.navigateUp;
 
+import org.wit.android.helpers.ContactHelper;
+import static org.wit.android.helpers.IntentHelper.selectContact;
+import static org.wit.android.helpers.ContactHelper.sendEmail;
+
 import org.wit.myrent.R;
 import org.wit.myrent.app.MyRentApp;
 import org.wit.myrent.models.Portfolio;
@@ -33,6 +38,10 @@ public class ResidenceActivity extends AppCompatActivity implements TextWatcher,
   private CheckBox rented;
   private Button dateButton;
   private Portfolio portfolio;
+  private Button tenantButton;
+  private String emailAddress = "";
+  private Button reportButton;
+  private static final int REQUEST_CONTACT = 1;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -44,11 +53,16 @@ public class ResidenceActivity extends AppCompatActivity implements TextWatcher,
     residence = new Residence();
     dateButton = (Button) findViewById(R.id.registrationDate);
     rented = (CheckBox) findViewById(R.id.isRented);
+    tenantButton = (Button) findViewById(R.id.tenant);
+    reportButton = (Button) findViewById(R.id.residence_reportButton);
+
     rented.setOnCheckedChangeListener(this);
     dateButton.setOnClickListener(this);
+    reportButton.setOnClickListener(this);
 
     // Register a TextWatcher in the EditText geolocation object
     geolocation.addTextChangedListener(this);
+    tenantButton.setOnClickListener(this);
 
     MyRentApp app = (MyRentApp) getApplication();
     portfolio = app.portfolio;
@@ -119,6 +133,26 @@ public class ResidenceActivity extends AppCompatActivity implements TextWatcher,
         Calendar c = Calendar.getInstance();
         DatePickerDialog dpd = new DatePickerDialog(this, this, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
         dpd.show();
+        break;
+      case R.id.tenant : selectContact(this, REQUEST_CONTACT);
+        break;
+      case R.id.residence_reportButton :
+        sendEmail(this, emailAddress,
+            getString(R.string.residence_report_subject), residence.getResidenceReport(this));
+        break;
+    }
+  }
+
+  @Override
+  public void onActivityResult(int requestCode, int resultCode, Intent data)
+  {
+    switch (requestCode)
+    {
+      case REQUEST_CONTACT:
+        String name = ContactHelper.getContact(this, data);
+        emailAddress = ContactHelper.getEmail(this, data);
+        tenantButton.setText(name + " : " + emailAddress);
+        residence.tenant = name;
         break;
     }
   }
