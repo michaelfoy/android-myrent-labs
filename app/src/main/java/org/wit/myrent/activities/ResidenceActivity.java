@@ -26,7 +26,7 @@ import org.wit.myrent.app.MyRentApp;
 import org.wit.myrent.models.Portfolio;
 import org.wit.myrent.models.Residence;
 
-public class ResidenceActivity extends AppCompatActivity implements TextWatcher, CompoundButton.OnCheckedChangeListener, View.OnClickListener, DatePickerDialog.OnDateSetListener {
+public class ResidenceActivity extends AppCompatActivity implements TextWatcher, View.OnClickListener, DatePickerDialog.OnDateSetListener {
 
   private EditText geolocation;
   private Residence residence;
@@ -44,7 +44,7 @@ public class ResidenceActivity extends AppCompatActivity implements TextWatcher,
     residence = new Residence();
     dateButton = (Button) findViewById(R.id.registrationDate);
     rented = (CheckBox) findViewById(R.id.isRented);
-    rented.setOnCheckedChangeListener(this);
+    rented.setOnCheckedChangeListener((button, isChecked) -> residence.rented = isChecked);
     dateButton.setOnClickListener(this);
 
     // Register a TextWatcher in the EditText geolocation object
@@ -52,8 +52,6 @@ public class ResidenceActivity extends AppCompatActivity implements TextWatcher,
 
     MyRentApp app = (MyRentApp) getApplication();
     portfolio = app.portfolio;
-
-    updateControls(residence);
 
     Long resId = (Long) getIntent().getExtras().getSerializable("RESIDENCE_ID");
     residence = portfolio.getResidence(resId);
@@ -65,7 +63,7 @@ public class ResidenceActivity extends AppCompatActivity implements TextWatcher,
 
   public void updateControls(Residence residence) {
     geolocation.setText(residence.geolocation);
-    rented.setOnCheckedChangeListener(this);
+    rented.setOnCheckedChangeListener((button, isChecked) -> residence.rented = isChecked);
     dateButton.setText(residence.getDateString());
   }
 
@@ -93,11 +91,11 @@ public class ResidenceActivity extends AppCompatActivity implements TextWatcher,
     return super.onOptionsItemSelected(item);
   }
 
-  @Override
+  /*@Override
   public void onCheckedChanged(CompoundButton arg0, boolean isChecked) {
     Log.i(this.getClass().getSimpleName(), "rented Checked");
     residence.rented = isChecked;
-  }
+  }*/
 
   @Override
   public void afterTextChanged(Editable editable) {
